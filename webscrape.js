@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 async function scrapeWebsite(url) {
     console.log(url)
   try {
-    return 'temp';
+    // return 'temp';
     const { data } = await axios.get(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',

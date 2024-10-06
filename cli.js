@@ -5,7 +5,7 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import io from "socket.io-client";
 import {scrapeForSEO} from './webscrape.js';
-
+import {spawn } from 'child_process';
 
 const program = new Command();
 const API_URL = 'http://atom.atomnetwork.xyz:3000/api';
@@ -100,6 +100,23 @@ program
         console.log("No login found!! Please login using login argument")
     }
     if(token){
+      let pythonProcess;
+    if (process.platform === 'win32') {
+      pythonProcess = spawn('py', ['python_scripts/worker.py', token]);
+    } else {
+      pythonProcess = spawn('python3', ['python_scripts/worker.py', token]);
+    }
+    
+    pythonProcess.stdout.on('data', (data) => {
+      console.log(`Python Output: ${data}`);
+    });
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`Python Error: ${data}`);
+    });
+  
+    pythonProcess.on('close', (code) => {
+      console.log(`Python process exited with code ${code}`);
+    });
   
       const socket = io('http://atom.atomnetwork.xyz:3000', {
         auth: {

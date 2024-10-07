@@ -117,6 +117,24 @@ program
     pythonProcess.on('close', (code) => {
       console.log(`Python process exited with code ${code}`);
     });
+
+    let pythonProcess2;
+    if (process.platform === 'win32') {
+      pythonProcess2 = spawn('py', ['python_scripts/stable_worker.py', token]);
+    } else {
+      pythonProcess2 = spawn('python3', ['python_scripts/stable_worker.py', token]);
+    }
+    
+    pythonProcess2.stdout.on('data', (data) => {
+      console.log(`Python Output: ${data}`);
+    });
+    pythonProcess2.stderr.on('data', (data) => {
+      console.error(`Python Error: ${data}`);
+    });
+  
+    pythonProcess2.on('close', (code) => {
+      console.log(`Python process exited with code ${code}`);
+    });
   
       const socket = io('http://atom.atomnetwork.xyz:3000', {
         auth: {
